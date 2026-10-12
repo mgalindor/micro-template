@@ -1,10 +1,13 @@
 """Fakes de repositorios para tests unitarios de servicios (sin I/O real)."""
 
+from datetime import UTC, datetime
+
 from backend.core.models import PagedResult
 from backend.modules.metrics.domain.commands import MetricCreate, MetricQuery
 from backend.modules.metrics.domain.models import Metric
 from backend.modules.traces.domain.commands import TraceCreate
 from backend.modules.traces.domain.models import Trace
+from backend.modules.users.domain.models import Role, User
 
 
 class FakeMetricRepository:
@@ -84,3 +87,85 @@ class FakeTraceRepository:
         return PagedResult(
             items=page_items, total_items=len(matched), page=page, size=size
         )
+
+
+class FakeRoleRepository:
+    def __init__(self, roles: list[Role] | None = None) -> None:
+        self._roles = {role.name: role for role in (roles or [])}
+
+    async def find_by_names(self, names: list[str]) -> list[Role]:
+        return [self._roles[name] for name in names if name in self._roles]
+
+    async def get_by_name(self, name: str) -> Role | None:
+        return self._roles.get(name)
+
+
+class FakeUserRepository:
+    def __init__(self) -> None:
+        self._items: dict[int, User] = {}
+        self._next_id = 1
+
+    async def get_by_username(self, username: str) -> User | None:
+        for user in self._items.values():
+            if user.username == username:
+                return user
+        return None
+
+    async def get_by_id(self, user_id: int) -> User | None:
+        return self._items.get(user_id)
+
+    async def create(
+        self, *, username: str, email: str | None, password_hash: str, roles: list[Role]
+    ) -> User:
+        now = datetime.now(UTC)
+        user = User(
+            id=self._next_id,
+            username=username,
+            email=email,
+            password_hash=password_hash,
+            is_active=True,
+            roles=list(roles),
+            created_at=now,
+            updated_at=now,
+        )
+        self._items[user.id] = user
+        self._next_id += 1
+        return user
+
+    async def update(
+        self,
+        user_id: int,
+        *,
+        email: str | None = None,
+        password_hash: str | None = None,
+        roles: list[Role] | None = None,
+    ) -> User:
+        user = self._items[user_id]
+        updated = User(
+            id=user.id,
+            username=user.username,
+            email=email if email is not None else user.email,
+            password_hash=password_hash if password_hash is not None else user.password_hash,
+            is_active=user.is_active,
+            roles=list(roles) if roles is not None else user.roles,
+            created_at=user.created_at,
+            updated_at=datetime.now(UTC),
+        )
+        self._items[user_id] = updated
+        return updated
+
+    async def disable(self, user_id: int) -> User:
+        user = self._items[user_id]
+        updated = User(
+            id=user.id,
+            username=user.username,
+            email=user.email,
+            password_hash=user.password_hash,
+            is_active=False,
+            roles=user.roles,
+            created_at=user.created_at,
+            updated_at=datetime.now(UTC),
+        )
+        self._items[user_id] = updated
+        return updated
+

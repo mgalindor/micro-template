@@ -14,6 +14,10 @@ from backend.modules.metrics.orm import (
 from backend.modules.traces.orm import (
     TraceORM,  # noqa: F401 (registra la tabla)
 )
+from backend.modules.users.orm import (
+    RoleORM,  # noqa: F401 (registra la tabla)
+    UserORM,  # noqa: F401 (registra la tabla)
+)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

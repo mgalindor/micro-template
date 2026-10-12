@@ -10,6 +10,8 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.core.config import settings
 from backend.core.exceptions import (
+    AuthenticationError,
+    AuthorizationError,
     BusinessError,
     DomainError,
     ResourceNotFoundError,
@@ -18,10 +20,11 @@ from backend.core.logging import configure_logging, log
 from backend.core.middleware import RequestIDMiddleware
 from backend.core.migrations import upgrade_schema_to_head
 from backend.core.models import problem_response
-from backend.db.session import engine
-from backend.modules.metrics.domain.exceptions import InvalidDateRangeError
+from backend.db.session import SessionLocal, engine
 from backend.modules.metrics.router import router as metrics_router
 from backend.modules.traces.router import router as traces_router
+from backend.modules.users.bootstrap import ensure_admin_user
+from backend.modules.users.router import router as users_router
 
 
 @asynccontextmanager
@@ -32,6 +35,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         # chocar con el event loop de FastAPI ya en marcha.
         await asyncio.to_thread(upgrade_schema_to_head)
         log.info("schema.migrated")
+    async with SessionLocal() as session:
+        await ensure_admin_user(session)
+        await session.commit()
     log.info("app.startup")
     yield
     await engine.dispose()
@@ -45,6 +51,7 @@ app.add_middleware(RequestIDMiddleware)
 # Prefijo /api reserva el resto de rutas para el SPA servido como estatico.
 app.include_router(metrics_router, prefix="/api")
 app.include_router(traces_router, prefix="/api")
+app.include_router(users_router, prefix="/api")
 
 
 @app.exception_handler(RequestValidationError)
@@ -100,6 +107,36 @@ async def business_error_handler(request: Request, exc: BusinessError) -> JSONRe
         detail=str(exc),
         type_="urn:problem-type:business-error",
         code=exc.code,
+    )
+
+
+@app.exception_handler(AuthenticationError)
+async def authentication_error_handler(
+    request: Request, exc: AuthenticationError
+) -> JSONResponse:
+    log.warning("authentication_error", path=str(request.url), detail=str(exc))
+    response = problem_response(
+        request,
+        status_code=401,
+        title="Authentication Failed",
+        detail=str(exc),
+        type_="urn:problem-type:authentication-error",
+    )
+    response.headers["WWW-Authenticate"] = "Bearer"
+    return response
+
+
+@app.exception_handler(AuthorizationError)
+async def authorization_error_handler(
+    request: Request, exc: AuthorizationError
+) -> JSONResponse:
+    log.warning("authorization_error", path=str(request.url), detail=str(exc))
+    return problem_response(
+        request,
+        status_code=403,
+        title="Authorization Failed",
+        detail=str(exc),
+        type_="urn:problem-type:authorization-error",
     )
 
 

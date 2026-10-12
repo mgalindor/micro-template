@@ -17,3 +17,11 @@ class BusinessError(DomainError):
     def __init__(self, code: str) -> None:
         self.code = code
         super().__init__(f"Business rule violation: {code}")
+
+
+class AuthenticationError(DomainError):
+    """Credenciales inválidas, token inválido/expirado o cuenta deshabilitada. -> 401."""
+
+
+class AuthorizationError(DomainError):
+    """El llamante está autenticado pero no tiene permiso para la acción. -> 403."""

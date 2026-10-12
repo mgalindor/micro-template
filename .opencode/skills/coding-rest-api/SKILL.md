@@ -40,6 +40,7 @@ metadata:
   - Why: a top-level array cannot be extended later (pagination metadata, totals, links) without a breaking change for clients.
 - A `GET` endpoint with filters that finds no matching records is **not an error**: return `200 OK` with an empty array in the collection field, e.g. `{ "data": [] }`. Never return `404` for an empty filtered list.
 - Reserve `404` for when a specific resource identified by an ID in the path does not exist (see section 4).
+- All fields in the request body have to include constraint validations such as type, format, required field, range, and regex, and need to be validated before processing the request.
 
 ## 4. Status Codes
 

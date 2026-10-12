@@ -57,6 +57,28 @@ class LoggingConfig(BaseModel):
     )
 
 
+class JWTConfig(BaseModel):
+    secret_key: str = Field(
+        default="change-me", description="Clave secreta usada para firmar los JWT"
+    )
+    algorithm: str = Field(
+        default="HS256", description="Algoritmo de firma usado para los JWT"
+    )
+    access_token_expire_minutes: int = Field(
+        default=30, description="Minutos de vigencia del access token"
+    )
+
+
+class AdminBootstrapConfig(BaseModel):
+    username: str = Field(
+        default="admin", description="Username del usuario admin por defecto"
+    )
+    password_hash: str = Field(
+        default="",
+        description="Hash bcrypt (no texto plano) de la password del admin por defecto",
+    )
+
+
 class AppConfig(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env.local", env_prefix="app_", env_nested_delimiter="__", extra="ignore"
@@ -75,6 +97,8 @@ class AppConfig(BaseSettings):
     )
     db: DatabaseConfig = Field(default_factory=DatabaseConfig)
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
+    jwt: JWTConfig = Field(default_factory=JWTConfig)
+    admin: AdminBootstrapConfig = Field(default_factory=AdminBootstrapConfig)
 
 
 settings = AppConfig()

@@ -16,6 +16,11 @@ around two observability-oriented domains:
 - **Traces** — record observability spans (trace id, span id, parent span,
   service/span name, timing, status, attributes) and look up all spans that
   belong to a given trace id.
+- **Users** — OAuth2 password grant authentication (JWT access tokens carrying
+  role/permission claims) plus admin-managed user creation, updates and
+  deactivation. A default admin user is bootstrapped on startup from the
+  `APP_ADMIN__USERNAME`/`APP_ADMIN__PASSWORD_HASH` env vars (the latter already
+  bcrypt-hashed). Token signing uses `APP_JWT__SECRET_KEY` (see `.env.local`).
 
 The codebase follows a **modular monolith**: each business domain lives under
 `src/backend/modules/<module_name>/` with its own router, schemas,
@@ -141,7 +146,7 @@ uv run pytest -q
 ## Running the e2e tests with Bruno
 
 The `tests/e2e` folder contains a [Bruno](https://www.usebruno.com/) HTTP
-collection (`metrics` and `traces` requests) with a `local` environment
+collection (`metrics`, `traces` and `users` requests) with a `local` environment
 pointing at `http://localhost:8000/api`.
 
 1. Install Bruno CLI (requires Node.js):

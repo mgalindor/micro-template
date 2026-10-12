@@ -1,0 +1,32 @@
+meta {
+  name: Create User
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "jdoe{{$randomInt}}",
+    "email": "jdoe{{$randomInt}}@example.com",
+    "password": "s3cr3t12",
+    "roles": []
+  }
+}
+
+script:post-response {
+  bru.setVar("userId", res.body.id);
+}
