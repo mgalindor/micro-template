@@ -28,6 +28,18 @@ All API routes are registered under the `/api` prefix (see `main.py`), leaving
 the rest of the path space free for the React SPA served from `apps/frontend`
 (see the root [README.md](../../README.md) for the full deployment story).
 
+> [!WARNING]
+> The `metrics` and `traces` modules are **example code** meant to illustrate
+> the project's conventions. Once the first real feature has been
+> implemented, remove the example code:
+>
+> - `src/backend/modules/metrics/`
+> - `src/backend/modules/traces/`
+> - `migrations/versions/4085f30c8a93_create_metrics_and_traces_tables.py`
+> - the `metrics`/`traces` router includes in `src/backend/main.py`
+> - `tests/unit/metrics/`, `tests/unit/traces/`
+> - `tests/e2e/metrics/`, `tests/e2e/traces/`
+
 ## Tech stack
 
 - **Language/runtime:** Python 3.13

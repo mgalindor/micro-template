@@ -3,6 +3,19 @@
 React + Vite + TypeScript SPA, consumed by the FastAPI backend (see the
 [root README](../../README.md) for the deployment strategy).
 
+> [!WARNING]
+> The `metrics` and `traces` features are **example code** meant to illustrate
+> the project's conventions. Once the first real feature has been
+> implemented, remove the example code:
+>
+> - `src/features/metrics/`
+> - `src/features/traces/`
+> - `src/lib/api/metrics.ts`
+> - `src/lib/api/traces.ts`
+> - `src/types/metrics.ts`
+> - `src/types/traces.ts`
+> - the `metrics`/`traces` routes in `src/app/router.tsx`
+
 ## Stack
 
 - **Build tool:** [Vite](https://vite.dev/)

@@ -1,9 +1,31 @@
-# Micro Template
+---
+client: client-name-here
+project: project-name-here
+summary: project summary goes here
+type: project-brief
+date: YYYY-MM-DD
+working-mode: yolo|relaxed|strict
+---
+
+
+# project-name-here
 
 Template to quickly bootstrap full-stack web mini-projects: **React (Vite +
 TypeScript)** on the frontend and **FastAPI (Python 3.13)** on the backend, in
 a single repository (monorepo), with a deployment pattern designed to
 simplify operating small projects as much as possible.
+
+
+## Main features
+
+- **feature**: description 
+
+
+## Requirements 
+- [Python](https://www.python.org/) 3.13 o superior
+- [uv](https://docs.astral.sh/uv/) (gestor de entornos/dependencias de Python)
+- [Node.js](https://nodejs.org/) (LTS recomendado) y npm (se instala junto con Node.js)
+
 
 ## Structure
 
@@ -18,6 +40,10 @@ docs/         Specs / architecture decisions
 
 Each folder (`apps/backend`, `apps/frontend`) has its own README with
 command details, conventions, and tests.
+
+## Getting Started
+
+How to get the project up and running locally.
 
 ## Deployment strategy
 

@@ -62,34 +62,12 @@ async def request_validation_error_handler(
     )
     return problem_response(
         request,
-        status_code=422,
+        status_code=400,
         title="Request Validation Failed",
         detail="One or more fields failed validation.",
         type_="urn:problem-type:validation-error",
         errors=errors,
     )
-
-
-@app.exception_handler(InvalidDateRangeError)
-async def invalid_date_range_handler(
-    request: Request, exc: InvalidDateRangeError
-) -> JSONResponse:
-    log.warning(
-        "invalid_date_range",
-        path=str(request.url),
-        start_date=exc.start_date.isoformat(),
-        end_date=exc.end_date.isoformat(),
-    )
-    return problem_response(
-        request,
-        status_code=422,
-        title="Invalid Date Range",
-        detail=str(exc),
-        type_="urn:problem-type:invalid-date-range",
-        start_date=exc.start_date.isoformat(),
-        end_date=exc.end_date.isoformat(),
-    )
-
 
 @app.exception_handler(ResourceNotFoundError)
 async def resource_not_found_handler(

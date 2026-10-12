@@ -1,7 +1,6 @@
 ---
 name: create-doc-template
 description: "Guidelines to create a document template, this template will be used by AI to generate repetible documents in a uniform format. Trigger: When user asks to create a document template"
-user-invocable: false
 metadata:
     type: skill
     version: "1.0.0"

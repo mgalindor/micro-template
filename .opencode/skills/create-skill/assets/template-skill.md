@@ -1,7 +1,6 @@
 ---
 name: {skill-name}
 description: "Trigger when : {Cover creation verbs (create, write, generate) + transformation verbs (transform, convert, turn into) + consultation queries (how should I..., what's the best way to...) — use the em dash (—) to extend coverage naturally}"
-user-invocable: false
 metadata:
     version: "1.0.0"
 ---
