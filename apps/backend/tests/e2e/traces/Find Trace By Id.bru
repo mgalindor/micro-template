@@ -1,0 +1,16 @@
+meta {
+  name: Find Trace By Id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/traces/{{traceId}}?page=1&size=20
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  size: 20
+}

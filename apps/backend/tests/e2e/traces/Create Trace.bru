@@ -1,0 +1,35 @@
+meta {
+  name: Create Trace
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/traces
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "trace_id": "{{$randomUUID}}",
+    "span_id": "{{$randomUUID}}",
+    "parent_span_id": null,
+    "span_name": "{{$randomWord}}",
+    "service_name": "metrics-collector",
+    "start_time": "{{$isoTimestamp}}",
+    "end_time": "{{$randomDateFuture}}",
+    "status": "ok",
+    "attributes": {
+      "http.method": "GET"
+    }
+  }
+}
+
+script:post-response {
+  bru.setVar("traceId", res.body.trace_id);
+}

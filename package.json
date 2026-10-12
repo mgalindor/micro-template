@@ -1,0 +1,15 @@
+{
+  "name": "micro-template",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix apps/frontend",
+    "dev:frontend": "npm run dev --prefix apps/frontend",
+    "dev:backend": "uv run --directory apps/backend backend",
+    "dev": "concurrently -n frontend,backend -c blue,green \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "build": "node scripts/build-frontend.mjs",
+    "start": "npm run build && uv run --directory apps/backend fastapi run src/backend/main.py --port 8000"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

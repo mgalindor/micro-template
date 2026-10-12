@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: metrics
+      POSTGRES_PASSWORD: pa55word
+      POSTGRES_DB: metrics
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    environment:
+      APP_DB__HOST: postgres
+      APP_DB__PORT: "5432"
+      APP_DB__USER: metrics
+      APP_DB__PASSWORD: pa55word
+      APP_DB__NAME: metrics
+      APP_LOGGING__LEVEL: DEBUG
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres

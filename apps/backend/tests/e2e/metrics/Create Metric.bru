@@ -1,0 +1,30 @@
+meta {
+  name: Create Metric
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/metrics
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "requests.{{$randomAbbreviation}}",
+    "value": {{$randomInt}},
+    "tags": {
+      "env": "prod"
+    },
+    "recordedAt": "{{$isoTimestamp}}"
+  }
+}
+
+script:post-response {
+  bru.setVar("metricName", res.body.name);
+}
