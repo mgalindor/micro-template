@@ -3,8 +3,9 @@ client: client-name-here
 project: project-name-here
 summary: project summary goes here
 type: project-brief
-date: YYYY-MM-DD
+created-at: YYYY-MM-DD
 working-mode: yolo|relaxed|strict
+configured: false
 ---
 
 

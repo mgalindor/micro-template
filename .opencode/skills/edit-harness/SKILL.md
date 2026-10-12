@@ -1,10 +1,10 @@
 ---
 name: edit-harness
-description: 'load when editing harness configuration files, such as skills, instructions, agents, and commands/prompts'
+description: "Defines the required front-matter metadata (type, version, updated-at, author). Trigger: when creating, editing, reviewing, or verifying a skill, SKILL.md, instructions file, agent, or prompt/command file — including filling in or checking its frontmatter."
 metadata:
     type: skill
-    version: "1.0.0"
-    updated-at: "2026-10-11"
+    version: "1.1.0"
+    updated-at: "2026-10-12"
     author:
       name: "Miguel Galindo Rodriguez"
       email: "mgldrz@gmail.com"

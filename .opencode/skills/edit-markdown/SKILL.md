@@ -17,9 +17,8 @@ metadata:
 - All markdown project documentation files must include a YAML front matter header at the top of the document enclosed by `---` lines
 - The front matter should include the following fields:
   - `title`: A clear and descriptive title of the document
-  - `date`: The date when the document was created or last updated (format: YYYY-MM-DD)
+  - `created-at`: The date when the document was created or last updated (format: YYYY-MM-DD)
   - `type`: The type of document See [Document types](#document-types)
-  - `scope`: The intended audience for the document (e.g., public, client, internal)
 
 ## Document types
 
